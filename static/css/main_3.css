@@ -1,0 +1,121 @@
+/*中间区域*/
+#user_container {
+    margin-top: 100px;
+}
+/*左侧区域*/
+.user_left{
+    width: 22%;
+    /*height: 1000px;*/
+    float: left;
+    /*background-color: #ffd0b8;*/
+}
+/*右侧区域*/
+.user_right{
+    width: 78%;
+    float: left;
+    /*padding-left: 50px;*/
+    /*padding-right: 50px;*/
+}
+/*左侧导航菜单上面的label，字体大小和字体颜色*/
+.left_label{
+    font-size: 28px;
+    margin-left: 15px;
+    margin-bottom: 30px;
+    color: #575856;
+}
+/*左侧导航菜单，样式字体大小和字体颜色*/
+#user_nav{
+    list-style-type: none;
+}
+#user_nav li{
+    font-size: 20px;
+    color: #575856;
+}
+/*左侧导航菜单选项分割线，不过没用了*/
+.divider{
+    background: #ccc;
+    border: none;
+    display: list-item;
+    height: 2px;
+    margin: 5px 0;
+}
+.nav_li{
+    cursor: pointer;
+    margin-top: 0px;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+/*鼠标滑过左侧导航菜单时*/
+.nav_li:hover{
+    /*text-decoration:none;*/
+    background-color: #f4f5f3;
+    font-weight: bold;
+}
+/*选中左侧导航菜单时*/
+.li_item_selected{
+    background-color: #d5d6d4;
+    font-weight: bold;
+}
+/*导航图标 大小和位置*/
+.nav_li img{
+    weight: 28px;
+    height: 28px;
+    margin-left:10px;
+}
+.li_icon{
+    width: 25%;
+    float: left;
+}
+/*导航文字位置*/
+.li_item{
+    width: 75%;
+    height: 32px;
+    float: left;
+    padding-left: 10px;
+    padding-top: 2px;
+}
+/*右侧框框*/
+.right_item{
+    border: 2px solid #ccc;
+    min-height: 320px;
+    margin-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    padding-top: 0px;
+    width:100%;
+    -moz-border-radius: 2em;
+    -webkit-border-radius: 2em;
+    border-radius: 2em;
+
+    display: none;
+}
+/*score echarts图表，大小和样式*/
+#score_curve_chart{
+    width:600px;
+    height: 400px;
+    margin: auto;   /*auto导致居中？？？？*/
+}
+/*Ranking echarts图表，大小和样式*/
+#rank_curve_chart{
+    width:600px;
+    height: 400px;
+    margin: auto;
+}
+#st_score_chart{
+    width:600px;
+    height: 400px;
+    margin: auto;
+}
+
+
+/*学生名单每行的按钮*/
+.st_list_btn{
+    height: 24px;
+    line-height:22px;
+    font-size: 12px;
+    font-weight: bold;
+    vertical-align:middle;
+    border-radius: 0.5em;
+}
+

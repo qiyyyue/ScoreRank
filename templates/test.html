@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="static/js/jquery.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript">
+        var username = 'Jack';
+        var password = '123456';
+
+        alert("in");
+
+        try
+        {
+
+            $.post("/user_info/login", {username: username, password: password},
+            function (data, status)
+            {
+                var login_req = JSON.parse(data);
+                if (login_req['code'] == 'True')
+                {
+                    alert("true");
+                }
+                else
+                {
+                    alert("false");
+                }
+            })
+                .error(function (e)
+                {
+                    alert(JSON.stringify(e));
+                });
+        }
+        catch (e)
+        {
+            alert("wrong");
+            alert(e.toString());
+        }
+
+        alert("out");
+    </script>
+
+</body>
+</html>

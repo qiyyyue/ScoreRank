@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Leaderboard-Confucius Institute</title>
+    <meta charset="utf-8">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/reset.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/animate.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_2.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_3.css")}}">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- Javascript Files -->
+    <script type="text/javascript" src="{{url_for("static",filename = "js/jquery.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/slider.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/wow.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/main.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/student_analysis.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/echarts/echarts.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/echarts/macarons.js")}}"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+
+<body onload="check_li_option(0)">
+
+<!-- check whether the user logged in -->
+<!-- end check -->
+
+<!-- header Section -->
+<header>
+    <div class="container">
+        <!-- Logo  -->
+        <a href="#" class="logo">
+            <img src="{{ url_for('static', filename = 'img/logo.png') }}" alt="Logo Img"/>
+        </a>
+        <!-- Navigation Menu  -->
+        <nav>
+            <ul class="nav navbar-nav">
+                <li><a href="student_home.html#" target="_self"  >Home</a> </li>
+                <li><a href="#" class="selected">Analysis</a> </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        User<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="student_user" target="_self">Settings</a></li>
+                        <li><a href="logout" target="_self">Log out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<!-- end header -->
+
+<!-- Analysis Section -->
+<div class="container" id="user_container">
+    <!-- begin left -->
+    <div class="user_left">
+        <label class="left_label">Analysis</label>
+        <ul id="user_nav">
+            <li class="nav_li clearfix" onclick="check_li_option(0)"  id="li_0">
+                <div class="li_icon"><img src="{{ url_for('static', filename = 'img/icon_7.png') }}"></div>
+                <div class="li_item">Score Curve</div>
+            </li>
+            <li class="nav_li clearfix" onclick="check_li_option(1)"  id="li_1">
+                <div class="li_icon"><img src="{{ url_for('static', filename = 'img/icon_6.png') }}"></div>
+                <div class="li_item">Ranking Curve</div>
+            </li>
+        </ul>
+    </div>
+    <!-- end left -->
+    <!-- begin right -->
+    <div class="user_right">
+        <!-- score curve -->
+        <div class="right_item" id="item_score_curve">
+            <div class="table_rank_2">
+                <label class="title_table">Daily Score Variation Curve</label>
+                <br/><br/>
+                <!--refresh the result according to the selected item-->
+                <!-- time range 近一周，近一个月，近三个月，近六个月，近一年-->
+                <label for="score_curve_time">time:</label>
+                <select id="score_curve_time" onchange="score_curve_chart_option()" style="width:180px;">
+                    <option selected>the latest week</option>
+                    <option>the latest month</option>
+                    <option>the latest three months</option>
+                    <option>the latest six months</option>
+                    <option>the latest year</option>
+                </select>
+                <label>&ensp; &ensp; &ensp; &ensp;</label>
+                <!-- APP -->
+                <label for="score_curve_APP">Chinese Learning App:</label>
+                <select id="score_curve_APP" onchange="score_curve_chart_option()">
+                    <option selected>All</option>
+                    <option>Duolingo</option>
+                </select>
+                <div><br/></div>
+                <div id="score_curve_chart"></div>
+            </div>
+        </div>
+        <!-- end score curve -->
+        <!-- rank curve -->
+        <div class="right_item" id="item_rank_curve">
+            <div class="table_rank_2">
+                <label class="title_table">Daily Ranking Variation Curve</label>
+                <br/><br/>
+                <!--refresh the result according to the selected item-->
+                <!-- time range 近一周，近一个月，近三个月，近六个月，近一年-->
+                <label for="rank_curve_time">time:</label>
+                <select id="rank_curve_time" onchange="rank_curve_chart_option()" style="width:180px;">
+                    <option selected>the latest week</option>
+                    <option>the latest month</option>
+                    <option>the latest three months</option>
+                    <option>the latest six months</option>
+                    <option>the latest year</option>
+                </select>
+                <label>&ensp; &ensp; &ensp; &ensp;</label>
+                <!-- APP -->
+                <label for="rank_curve_APP">Chinese Learning App:</label>
+                <select id="rank_curve_APP" onchange="rank_curve_chart_option()">
+                    <option selected>All</option>
+                    <option>Duolingo</option>
+                </select>
+                <div><br/></div>
+                <div id="rank_curve_chart"></div>
+            </div>
+        </div>
+        <!-- end rank curve -->
+    </div>
+    <!-- end right -->
+
+</div>
+<!-- end analysis-->
+
+
+<!-- Footer Section -->
+<footer class="clearfix">
+    <div class="container">
+
+        <!-- Copyrights  -->
+        <div class="copyright animated wow fadeInUp">
+            <img src="{{ url_for('static', filename = 'img/footer_logo.png') }}" alt="logo img2" class="footer_logo">
+            <p>© 2018 copyright Aberdeen-Wuhan JRI- All rights reserved. This Site.</p>
+        </div>
+
+        <div class="footer_links">
+
+            <!-- About Links  -->
+            <div class="about columns animated wow fadeInRight" data-wow-delay=".3s">
+                <h3 class="columns_title">About</h3>
+                <ul>
+                    <li>
+                        <a href="">Leaderboard</a>
+                    </li>
+                    <li>
+                        <a href="">Aberdeen-Wuhan JRI</a>
+                    </li>
+                    <li>
+                        <a href="">Disclaimer</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Address  -->
+            <div class="address columns animated wow fadeInRight" data-wow-delay=".4s">
+                <h3 class="columns_title">Address</h3>
+                <p>xx  xx</p>
+                <p>Aberdeen, UK xxxxxxx</p>
+                <p class="phone">(000) 000-0000</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</footer><!-- end footer -->
+
+</body>
+</html>

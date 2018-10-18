@@ -1,0 +1,106 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboard-Chinese Learning</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/reset.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/animate.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_2.css")}}">
+    <!--customized-->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <!-- Javascript Files -->
+    <script type="text/javascript" src="{{url_for("static",filename = "js/jquery.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/slider.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/wow.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/main.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/bootstrap.min.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/login.js")}}"></script>
+    <!--customized-->
+    
+
+</head>
+
+
+<body>
+
+<script type="text/javascript">
+    function check_login()
+    {
+        var username = $("#user_id").val();
+        var password = $("#password").val();
+        if (  username == "" )
+        {
+            alert("Please entering the user ID number.");
+            return;
+        }
+        if (  password == "" )
+        {
+            alert("Please entering the password.");
+            return;
+        }
+
+        $.post("/user_info/login", {username: username, password: password},
+            function (data)
+            {
+                var login_req = JSON.parse(data);
+                if (login_req['code'] == 'True')
+                {
+                    sessionStorage.setItem("username", username);
+                    sessionStorage.setItem("user_role", login_req['user_role']);
+                    home_url = 'student_home';
+                    if(login_req['user_role']==0)
+                        var home_url = 'teacher_home.html';
+                    else if(login_req['user_role']==1)
+                        var home_url = 'student_home.html';
+                    window.location.href = home_url;
+                }
+                else
+                {
+
+                }
+            })
+                .error(function (e)
+                    {
+
+                    });
+
+    }
+</script>
+
+<div id="login_bg">
+    <img id="bg_img" src="{{ url_for('static', filename = 'img/login_bg.jpg') }}"/>
+    <div id="login_front">
+        <div id="c">
+            <img src="{{ url_for('static', filename = 'img/login_logo.png') }}"/>
+        </div>
+
+        <div id="login_inbox">
+            <div id="labl_usernm">UserID</div>
+            <div id="labl_passwd">Password</div>
+            <div id="link_fgt_passwd"><a href="#">Forget?</a></div>
+            <form id="form_login" method="post" action="">
+                <input type="text" id="user_id" name="username" placeholder="Please entering your ID number."/>
+                <input type="password" id="password" name="password" placeholder="Please entering your password."/>
+            </form>
+            <div id="button_visitor" onClick="visitor_login()">Visitor</div>
+            <div id="button_login" onClick="check_login()">Log In</div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Footer Section -->
+<!-- Copyrights  -->
+<div id="login_copyright">
+    <p>© 2018 copyright Aberdeen-Wuhan JRI- All rights reserved. This Site.</p>
+</div>
+
+
+</body>
+</html>
+
