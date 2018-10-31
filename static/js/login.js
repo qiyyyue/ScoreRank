@@ -13,32 +13,31 @@ function check_login()
         return;
     }
 
-    alert("111");
     $.post("/user_info/login", {username: username, password: password},
         function (data)
         {
-            alert("true");
             var login_req = JSON.parse(data);
+            console.log(login_req);
             if (login_req['code'] == 'True')
             {
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("user_role", login_req['user_role']);
+                home_url = '/';
                 if(login_req['user_role']==0)
-                    var home_url = 'teacher_home.php';
+                    var home_url = 'teacher_home';
                 else if(login_req['user_role']==1)
-                    var home_url = 'student_home.php';
+                    var home_url = 'student_home';
                 window.location.href = home_url;
             }
             else
             {
-
+                alert('Wrong user_id/password! Please try again!');
             }
         })
             .error(function (e)
                 {
-
+                    alert('Wrong user_id/password! Please try again!');
                 });
-
 }
 
 function visitor_login(){

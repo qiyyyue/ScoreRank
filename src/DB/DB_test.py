@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*
 import datetime
 
-from src.DB.UserInfoDB import user_info_update
-from src.DB.PerformanceDB import performance_ins
+import init_source_file
+from src.DB.UserInfoDB import *
+from src.DB.PerformanceDB import *
 from flask import request, session, json
 from flask import Blueprint, render_template, redirect
-from src.DB.UserInfoDB import *
-from src.DB.ParticipantDB import *
-from src.DB.PerformanceDB import *
-from src.DB.AppInfoDB import *
-from src.API.DuolingoAPI import *
+# from UserInfoDB import *
+# from ParticipantDB import *
+# from PerformanceDB import *
+# from AppInfoDB import *
+# from DuolingoAPI import *
 # user_info_update("qiyyyue", new_email="qiyyyue@gmail.com", new_class=1, new_location="UK#ABDN", new_timezone="UK")
 # performance_ins(2, 1, 2, 20)
 # #print(datetime.datetime.now().strftime('%Y-%m-%d'))
@@ -41,9 +43,26 @@ def test_get_history_point():
     user_id = 4
     print(performance_get_history_point_by_id(user_id))
 # test_get_point()
-test_get_history_point()
-test_get_history_rank()
 
+def test_query_userinfo():
+    userinfo = query_userinfo_by_username('jack_new')
+    for var in userinfo:
+        print(str(var))
+
+def test_query_all_point():
+    print(performance_query_all_by_id(4))
+    print(performance_query_pre_all_by_id(4))
+
+def test_update_data():
+    user_id = 3
+    user_list = query_users_by_loc()
+    for user_id in user_list:
+        performance_update_score_till_now(user_id)
+
+test_update_data()
+# test_get_history_point()
+# test_get_history_rank()
+# test_query_userinfo()
 # user_list = query_users_by_loc(country="Scotland")
 # re_list = []
 # for user_id in user_list:

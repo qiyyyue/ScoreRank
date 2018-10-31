@@ -1,9 +1,9 @@
 from flask import request, session, json
-from src.DB.UserInfoDB import *
-from src.DB.ParticipantDB import *
-from src.DB.PerformanceDB import *
-from src.DB.AppInfoDB import *
-from src.API.DuolingoAPI import *
+from UserInfoDB import *
+from ParticipantDB import *
+from PerformanceDB import *
+from AppInfoDB import *
+from DuolingoAPI import *
 from flask import Blueprint, render_template, redirect, make_response
 user_info = Blueprint('user_info',__name__)
 
@@ -23,7 +23,12 @@ def link_duolingo():
 
     duolingo_score = get_duolingo_score(duo_username, duo_password)
     if duolingo_score == {}:
-        return json.dumps({"code": "False", 'msg': 'link duolingo failed'}, ensure_ascii=False)
+        return json.dumps({"code": "False", 'msg': 'wrong duolingo info'}, ensure_ascii=False)
+
+    if not performance_clear_by_id(user_id):
+        return json.dumps({"code": "False", 'msg': 'clear performance info failed'}, ensure_ascii=False)
+    if not participant_clear_by_id(user_id):
+        return json.dumps({"code": "False", 'msg': 'clear participant info failed'}, ensure_ascii=False)
 
     point = duolingo_score['points']
     level = duolingo_score['level']
@@ -74,7 +79,8 @@ def login():
 
     if user_login(username, password):
         session['username'] = username
-        return json.dumps({"code": "True"}, ensure_ascii=False)
+        user_role = user_query_role(username)
+        return json.dumps({"code": "True", "user_role": user_role}, ensure_ascii=False)
     else:
         return json.dumps({"code": "False"}, ensure_ascii=False)
 

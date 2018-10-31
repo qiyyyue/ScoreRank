@@ -1,23 +1,23 @@
 var page_num = 0;
 
-var continent_0 = [["all","all"]];
-var continent_1 = [["all","all"],
-    ["the United Kingdom","all","Aberdeen","Edinburgh"],
-    ["France","all","Paris","Poitiers"]];
-var continent_2 = [["all","all"],
-    ["the United States","all","Chicago","New York"],
-    ["Canada","all","Regina","Ottawa"]];
-var continent_3 = [["all","all"],
-    ["Egypt","all","Cairo","Ismailia"],
-    ["Kenya","all","Nairobi","Eldoret"]];
-var continent_4 = [["all","all"],
-    ["Australia","all","Sydney","Melbourne"],
-    ["New Zealand","all","Wellington","Auckland"]];
-var continent_5 = [["all","all"],
-    ["Japan","all","Kyoto","Sapporo"],
-    ["Korea","all","Seoul","Incheon"]];
+var continent_0 = [["All","All"]];
+var continent_1 = [["All","All"],
+    ["UK","All","Aberdeen","Edinburgh"],
+    ["France","All","Paris","Poitiers"]];
+var continent_2 = [["All","All"],
+    ["the United States","All","Chicago","New York"],
+    ["Canada","All","Regina","Ottawa"]];
+var continent_3 = [["All","All"],
+    ["Egypt","All","Cairo","Ismailia"],
+    ["Kenya","All","Nairobi","Eldoret"]];
+var continent_4 = [["All","All"],
+    ["Australia","All","Sydney","Melbourne"],
+    ["New Zealand","All","Wellington","Auckland"]];
+var continent_5 = [["All","All"],
+    ["Japan","All","Kyoto","Sapporo"],
+    ["Korea","All","Seoul","Incheon"]];
 
-var my_info = {};
+var self_info;
 var rank_list;
 
 function init_rank_data(continent, country, city, period )
@@ -34,49 +34,98 @@ function init_rank_data(continent, country, city, period )
             async : false
         });
 
-        $.post("/home/GetLeaderBoard", {continent: continent, country: country, city: city, period: period},
+        $.post("/home/GetLeaderBoard", {continent: continent, country: country, city: city, period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
             if (req_data['code'] == 'True')
             {
                 rank_list = req_data['leader_board_list'];
+                self_info = req_data['self_info']
                 // alert("flag_l");
-                flag_l = true;
+                // flag_l = true;
             }
         });
 
-        $.post("/home/GetRank", {username: sessionStorage.getItem("username")},
-        function (data) {
-            var req_data = JSON.parse(data);
-            if (req_data['code'] == 'True')
-            {
-                my_info['rank'] = req_data['rank'];
-                // alert("flag_r");
-                flag_r = true;
-            }
-        });
-
-        $.post("/home/GetPoint", {username: sessionStorage.getItem("username")},
-        function (data) {
-            var req_data = JSON.parse(data);
-            if (req_data['code'] == 'True')
-            {
-                my_info['point'] = req_data['point'];
-                // alert("flag_p");
-                flag_p = true;
-            }
-        });
+        // $.post("/home/GetRank", {username: sessionStorage.getItem("username")},
+        // function (data) {
+        //     var req_data = JSON.parse(data);
+        //     if (req_data['code'] == 'True')
+        //     {
+        //         my_info['rank'] = req_data['rank'];
+        //         // alert("flag_r");
+        //         flag_r = true;
+        //     }
+        // });
+        //
+        // $.post("/home/GetPoint", {username: sessionStorage.getItem("username")},
+        // function (data) {
+        //     var req_data = JSON.parse(data);
+        //     if (req_data['code'] == 'True')
+        //     {
+        //         my_info['point'] = req_data['point'];
+        //         // alert("flag_p");
+        //         flag_p = true;
+        //     }
+        // });
     }
     catch (e)
     {
         alert(e.toString());
     }
 
-    view_first_page();
+    // view_first_page();
 
 }
 
+function init_data()
+{
+    if (!sessionStorage.getItem('username'))
+    {
+        window.location.href = '/';
+    }
+
+
+    page_num = 0;
+
+    var continent = document.getElementById("view_level_continent");
+    var country = document.getElementById("view_level_country");
+    var city = document.getElementById("view_level_city");
+    var continent_index = 0;
+    var country_index = 0;
+    var city_index = 0;
+
+    //1. clean old
+    country.innerHTML ="";
+    city.innerHTML = "";
+
+    continent[continent_index].selected = true;
+    for(var i=0;i<continent_0.length;i++){
+        country.add(new Option(continent_0[i][0],continent_0[i][0]));
+    }
+    country[country_index].selected = true;
+    for(var j=1;j<continent_0[country.selectedIndex].length;j++){
+        city.add(new Option(continent_0[country.selectedIndex][j]));
+    }
+    city[city_index].selected = true;
+
+    var period = document.getElementById("view_time");
+
+    // alert(continent.options[continent.selectedIndex].value);
+    init_rank_data(continent.options[continent.selectedIndex].value,
+        country.options[country.selectedIndex].value,
+        city.options[city.selectedIndex].value,
+        period.options[period.selectedIndex].value);
+
+
+    //3. update result table
+    document.getElementById("table_home_my").style.display='none';
+    document.getElementById("table_home_list").style.display='none';
+    var time = document.getElementById("view_time");
+    var time_index = time.selectedIndex;
+
+    view_first_page();
+}
 
 function check_view_option(){
     page_num = 0;
@@ -89,7 +138,7 @@ function check_view_option(){
     var city_index = city.selectedIndex;
 
 
-    init_rank_data("Europe", "UK", "Aberdeen", "Weekly");
+    // init_rank_data("All", "All", "All", "All");
 
     //1. clean old
     country.innerHTML ="";
@@ -163,6 +212,15 @@ function check_view_option(){
         city[city_index].selected = true;
     }
 
+
+    var period = document.getElementById("view_time");
+
+    // alert(continent.options[continent.selectedIndex].value);
+    init_rank_data(continent.options[continent.selectedIndex].value,
+        country.options[country.selectedIndex].value,
+        city.options[city.selectedIndex].value,
+        period.options[period.selectedIndex].value);
+
     //3. update result table
     document.getElementById("table_home_my").style.display='none';
     document.getElementById("table_home_list").style.display='none';
@@ -232,19 +290,19 @@ function view_first_page()
         tdCell.innerHTML = rank_list[i]['username'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Continent";
+        tdCell.innerHTML = rank_list[i]['continent'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Country";
+        tdCell.innerHTML = rank_list[i]['country'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "City";
+        tdCell.innerHTML = rank_list[i]['city'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
         tdCell.innerHTML = rank_list[i]['point'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Status";
+        tdCell.innerHTML = rank_list[i]['status'];
         tdRow.appendChild(tdCell);
         //write tr row
         document.getElementById("home_list").appendChild(tdRow);
@@ -264,10 +322,10 @@ function previous_page()
 
     page_num = page_num - 1;
 
-    // add_self_rank();
-    $('#home_my').html("");
+    add_self_rank();
+    // $('#home_my').html("");
     $('#home_list').html("");
-    document.getElementById("table_home_my").style.display='none';
+    // document.getElementById("table_home_my").style.display='none';
     document.getElementById("table_home_list").style.display='none';
 
     var continent = document.getElementById("view_level_continent");
@@ -288,28 +346,28 @@ function previous_page()
         tdCell.innerHTML = rank_list[i]['rank'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = rank_list[i]['usernmae'];
+        tdCell.innerHTML = rank_list[i]['username'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Continent";
+        tdCell.innerHTML = rank_list[i]['continent'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Country";
+        tdCell.innerHTML = rank_list[i]['country'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "City";
+        tdCell.innerHTML = rank_list[i]['city'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
         tdCell.innerHTML = rank_list[i]['point'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Status";
+        tdCell.innerHTML = rank_list[i]['status'];
         tdRow.appendChild(tdCell);
         //write tr row
         document.getElementById("home_list").appendChild(tdRow);
     }
 
-    document.getElementById("table_home_my").style.display='block';
+    // document.getElementById("table_home_my").style.display='block';
     document.getElementById("table_home_list").style.display='block';
 }
 
@@ -324,10 +382,10 @@ function next_page()
 
     page_num = page_num + 1;
 
-
-    $('#home_my').html("");
+    add_self_rank();
+    // $('#home_my').html("");
     $('#home_list').html("");
-    document.getElementById("table_home_my").style.display='none';
+    // document.getElementById("table_home_my").style.display='none';
     document.getElementById("table_home_list").style.display='none';
 
     var continent = document.getElementById("view_level_continent");
@@ -350,25 +408,25 @@ function next_page()
         tdCell.innerHTML = rank_list[i]['username'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Continent";
+        tdCell.innerHTML = rank_list[i]['continent'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Country";
+        tdCell.innerHTML = rank_list[i]['country'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "City";
+        tdCell.innerHTML = rank_list[i]['city'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
         tdCell.innerHTML = rank_list[i]['point'];
         tdRow.appendChild(tdCell);
         tdCell = document.createElement('td');
-        tdCell.innerHTML = "Status";
+        tdCell.innerHTML = rank_list[i]['status'];
         tdRow.appendChild(tdCell);
         //write tr row
         document.getElementById("home_list").appendChild(tdRow);
     }
 
-    document.getElementById("table_home_my").style.display='block';
+    // document.getElementById("table_home_my").style.display='block';
     document.getElementById("table_home_list").style.display='block';
 }
 
@@ -379,25 +437,25 @@ function add_self_rank(){
     var tdRow = document.createElement('tr');
     //generate tdcell
     var tdCell = document.createElement('td');
-    tdCell.innerHTML = my_info['rank'];
+    tdCell.innerHTML = self_info['rank'];
     tdRow.appendChild(tdCell);
     tdCell = document.createElement('td');
-    tdCell.innerHTML = sessionStorage.getItem("username");
+    tdCell.innerHTML = self_info['username'];
     tdRow.appendChild(tdCell);
     tdCell = document.createElement('td');
-    tdCell.innerHTML = "Continent";
+    tdCell.innerHTML = self_info['continent'];
     tdRow.appendChild(tdCell);
     tdCell = document.createElement('td');
-    tdCell.innerHTML = "Country";
+    tdCell.innerHTML = self_info['country'];;
     tdRow.appendChild(tdCell);
     tdCell = document.createElement('td');
-    tdCell.innerHTML = "City";
+    tdCell.innerHTML = self_info['city'];;
     tdRow.appendChild(tdCell);
     tdCell = document.createElement('td');
-    tdCell.innerHTML = my_info['point'];
+    tdCell.innerHTML = self_info['point'];
     tdRow.appendChild(tdCell);
     tdCell = document.createElement('td');
-    tdCell.innerHTML = "Status";
+    tdCell.innerHTML = self_info['status'];
     tdRow.appendChild(tdCell);
     //write tr row
     document.getElementById("home_my").appendChild(tdRow);

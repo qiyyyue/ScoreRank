@@ -27,49 +27,6 @@
 
 <body>
 
-<script type="text/javascript">
-    function check_login()
-    {
-        var username = $("#user_id").val();
-        var password = $("#password").val();
-        if (  username == "" )
-        {
-            alert("Please entering the user ID number.");
-            return;
-        }
-        if (  password == "" )
-        {
-            alert("Please entering the password.");
-            return;
-        }
-
-        $.post("/user_info/login", {username: username, password: password},
-            function (data)
-            {
-                var login_req = JSON.parse(data);
-                if (login_req['code'] == 'True')
-                {
-                    sessionStorage.setItem("username", username);
-                    sessionStorage.setItem("user_role", login_req['user_role']);
-                    home_url = 'student_home';
-                    if(login_req['user_role']==0)
-                        var home_url = 'teacher_home.html';
-                    else if(login_req['user_role']==1)
-                        var home_url = 'student_home.html';
-                    window.location.href = home_url;
-                }
-                else
-                {
-
-                }
-            })
-                .error(function (e)
-                    {
-
-                    });
-
-    }
-</script>
 
 <div id="login_bg">
     <img id="bg_img" src="{{ url_for('static', filename = 'img/login_bg.jpg') }}"/>

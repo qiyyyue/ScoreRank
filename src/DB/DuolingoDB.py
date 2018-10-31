@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*
 import pymysql
-from configure import config_default
+import config_default
 
 def duo_insert(username, password, points, level):
     configs = config_default.configs

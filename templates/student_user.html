@@ -20,6 +20,7 @@
     <script type="text/javascript" src="{{url_for("static",filename = "js/main.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static",filename = "js/bootstrap.min.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static",filename = "js/student_user.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/logout.js")}}"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 
@@ -38,15 +39,15 @@
         <!-- Navigation Menu  -->
         <nav>
             <ul class="nav navbar-nav">
-                <li><a href="student_home.html#" target="_self"  >Home</a> </li>
-                <li><a href="student_analysis.html#" target="_self">Analysis</a> </li>
+                <li><a href="student_home" target="_self"  >Home</a> </li>
+                <li><a href="student_analysis" target="_self">Analysis</a> </li>
                 <li class="dropdown">
                     <a href="#" style="color:#53a7ff;font-weight: bold;" class="dropdown-toggle" data-toggle="dropdown">
                         User<b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Settings</a></li>
-                        <li><a href="logout.html" target="_self">Log out</a></li>
+                        <li><a onclick="logout()" target="_self">Log out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -142,7 +143,7 @@
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_mem.jpg" class="app_icon">
+                            <img src="{{ url_for('static', filename = 'img/app_icon_mem.jpg') }}" class="app_icon">
                             Memrize</td>
                         <td id="bind_status_mem" class="status">Developing</td>
                         <td class="edit">
@@ -165,7 +166,7 @@
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_he.jpg" class="app_icon">
+                            <img src="{{ url_for('static', filename = 'img/app_icon_he.jpg') }}" class="app_icon">
                             Hello Chinese</td>
                         <td id="bind_status_he" class="status">Developing</td>
                         <td class="edit">
@@ -188,7 +189,7 @@
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_sk.png" class="app_icon">
+                            <img src="{{ url_for('static', filename = 'img/app_icon_sk.png') }}" class="app_icon">
                             Chinese Skill</td>
                         <td id="bind_status_sk" class="status">Developing</td>
                         <td class="edit">
@@ -438,7 +439,7 @@
 
         <!-- Copyrights  -->
         <div class="copyright animated wow fadeInUp">
-            <img src="img/footer_logo.png" alt="logo img2" class="footer_logo">
+            <img src="{{ url_for('static', filename = 'img/footer_logo.png') }}" alt="logo img2" class="footer_logo">
             <p>© 2018 copyright Aberdeen-Wuhan JRI- All rights reserved. This Site.</p>
         </div>
 

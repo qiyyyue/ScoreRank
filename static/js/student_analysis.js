@@ -1,6 +1,16 @@
 
-var history_rank_list = [1, 2, 3, 4, 5, 6, 7];
-var history_point_list = [11, 22, 33, 44 ,33, 22, 11];
+var history_rank_list = [];
+var history_point_list = [];
+var history_avg_point_list = [];
+var history_datetime = [];
+
+function check_login()
+{
+    if (!sessionStorage.getItem('username'))
+    {
+        window.location.href = '/';
+    }
+}
 
 function init_history_rank(period)
 {
@@ -9,7 +19,7 @@ function init_history_rank(period)
         $.ajaxSetup({
             async : false
         });
-        $.post("/leader_board/GetHistoryRank", {period: period, username: sessionStorage.getItem("username")},
+        $.post("/analysis/GetHistoryRank", {period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
@@ -34,7 +44,7 @@ function init_history_points(period)
         $.ajaxSetup({
             async : false
         });
-        $.post("/leader_board/GetHistoryPoint", {period: period, username: sessionStorage.getItem("username")},
+        $.post("/analysis/GetHistoryPoint", {period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
@@ -42,6 +52,56 @@ function init_history_points(period)
             {
                 console.log(req_data['history_point_list']);
                 history_point_list = req_data['history_point_list'];
+            }
+        });
+    }
+    catch (e)
+    {
+        console.log("error_point");
+        return null;
+    }
+}
+
+function init_history_avg_points(period)
+{
+    try
+    {
+        $.ajaxSetup({
+            async : false
+        });
+        $.post("/analysis/GetHistoryAvgPoint", {period: period, username: sessionStorage.getItem("username")},
+        function (data)
+        {
+            var req_data = JSON.parse(data);
+            if (req_data['code'] == 'True')
+            {
+                console.log(req_data['history_avg_point_list']);
+                history_avg_point_list = req_data['history_avg_point_list'];
+            }
+        });
+    }
+    catch (e)
+    {
+        console.log("error_point");
+        return null;
+    }
+}
+
+function init_history_date(period)
+{
+    try
+    {
+        $.ajaxSetup({
+            async : false
+        });
+        $.post("/analysis/GetHistoryDate", {period: period, username: sessionStorage.getItem("username")},
+        function (data)
+        {
+            var req_data = JSON.parse(data);
+            if (req_data['code'] == 'True')
+            {
+                console.log(req_data['history_date_list']);
+                history_datetime = req_data['history_date_list'];
             }
         });
     }
@@ -77,7 +137,9 @@ function get_history_rank(period)
     }
 }
 
-function check_li_option(li_option) {
+function check_li_option(li_option)
+{
+    check_login();
     document.getElementById("item_score_curve").style.display ='none';
     document.getElementById("item_rank_curve").style.display ='none';
     if(li_option==0){
@@ -99,9 +161,12 @@ function score_curve_chart_option(){
     var time_index = time.selectedIndex;    //选择看多久的每日得分，展示最近一周的每日得分曲线/最近一个月/最近一年/最近
     var app_index = app.selectedIndex;      //选择看哪个APP的每日得分变化曲线
 
+    alert(time.options[time.selectedIndex].value);
     //init data
-    init_history_rank("Weekly");
-    init_history_points("Weekly");
+    init_history_rank(time.options[time.selectedIndex].value);
+    init_history_points(time.options[time.selectedIndex].value);
+    init_history_avg_points(time.options[time.selectedIndex].value);
+    init_history_date(time.options[time.selectedIndex].value);
 
     //******need to change:
     // xAxis-data (dates)
@@ -127,7 +192,7 @@ function score_curve_chart_option(){
             axisLine: {lineStyle: {color: '#575856'}},
             type: 'category',
             boundaryGap: false,
-            data: ["2018-7-4", "2018-7-5", "2018-7-6", "2018-7-7", "2018-7-8", "2018-7-9", "2018-7-10"]
+            data: history_datetime
         }],
         yAxis: [{
             // min:300,
@@ -142,7 +207,7 @@ function score_curve_chart_option(){
                 type: 'line',
                 // symbol:'none',
                 smooth: 0.1,
-                data: history_rank_list
+                data: history_point_list
                 //     data:[301, 302, 304, 305, 306, 307,308]
             },
             {
@@ -151,7 +216,7 @@ function score_curve_chart_option(){
                 // symbol:'none',
                 smooth: 0.1,
                 color: ['#eba052'],
-                data: history_point_list
+                data: history_avg_point_list
                 // data:[311, 312, 314, 315, 316, 317,318]
             }]
     };//end option
@@ -192,7 +257,7 @@ function rank_curve_chart_option(){
             axisLine: {lineStyle: {color: '#575856'}},
             type: 'category',
             boundaryGap: false,
-            data: ["2018-7-4", "2018-7-5", "2018-7-6", "2018-7-7", "2018-7-8", "2018-7-9", "2018-7-10"]
+            data: history_datetime
         }],
         yAxis: [{
             // min:300,

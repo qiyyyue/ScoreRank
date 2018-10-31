@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*
 import datetime
 
 import pymysql
-from configure import config_default
+import config_default
 
 
 def class_insert(class_id, teacher_id, user_id):

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*
 import sys
-from configure import config_default
+import config_default
 
 import pymysql
 

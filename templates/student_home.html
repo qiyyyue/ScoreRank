@@ -17,12 +17,13 @@
     <script type="text/javascript" src="{{url_for("static",filename = "js/wow.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static",filename = "js/main.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static",filename = "js/student_home.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/logout.js")}}"></script>
     <!--customized -->
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 </head>
 
 
-<body onload = "check_view_option()">
+<body onload = "init_data()">
 
 <!-- check whether the user logged in -->
 
@@ -46,7 +47,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="student_user" target="_self">Settings</a></li>
-                        <li><a href="logout.html" target="_self">Log out</a></li>
+                        <li><a onclick="logout()" target="_self">Log out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -69,8 +70,8 @@
             <!-- Continent 洲 -->
             <label for="view_level_continent">Continent:</label>
             <select id="view_level_continent" onchange="view_option_changed_continent()" style="width:100px;">
-                <option>all</option>
-                <option selected>Europe</option>
+                <option selected>All</option>
+                <option>Europe</option>
                 <option>America</option>
                 <option>Africa</option>
                 <option>Oceania</option>
@@ -80,22 +81,22 @@
             <!-- Country/Region 国家和地区 -->
             <label for="view_level_country">Country/Region:</label>
             <select id="view_level_country" onchange="view_option_changed_country()" style="width:120px;">
-                <option selected>all</option>
+                <option selected>All</option>
             </select>
             <label>&ensp; &ensp;</label>
             <!-- City 城市-->
             <label for="view_level_city">City:</label>
             <select id="view_level_city" onchange="view_option_changed_city()">
-                <option selected>all</option>
+                <option selected>All</option>
             </select>
             <label>&ensp; &ensp;</label>
             <!-- time range 总，每日，每周，每月-->
             <label for="view_time">range:</label>
             <select id="view_time" onchange="view_option_changed_time()" style="width:80px;">
-                <option selected>all time</option>
-                <option>daily</option>
-                <option>weekly</option>
-                <option>monthly</option>
+                <option selected>All</option>
+                <option>Daily</option>
+                <option>Weekly</option>
+                <option>Monthly</option>
             </select>
         </div>
         <br/><br/>

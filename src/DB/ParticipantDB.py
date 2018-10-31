@@ -1,7 +1,29 @@
+# -*- coding: utf-8 -*
 import datetime
 
 import pymysql
-from configure import config_default
+import config_default
+
+
+def participant_clear_by_id(user_id):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    sql = "DELETE FROM participant WHERE user_id = '%d'" % (user_id)
+    try:
+        # 执行sql语句
+        cursor.execute(sql)
+        # 执行sql语句
+        db_conn.commit()
+    except:
+        # 发生错误时回滚
+        db_conn.rollback()
+        return False
+    return True
 
 
 def participant_insert(user_id, app_id, app_user_name, app_user_password, app_user_sl, app_user_sp):
@@ -57,6 +79,31 @@ def participant_query_all():
         db_conn.rollback()
     db_conn.close()
     return re_list
+
+def participant_query_duo_info_by_user_id(user_id):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    re_list = []
+    # SQL 插入语句
+    sql = "SELECT app_user_name, app_user_password FROM participant WHERE user_id = '%d' AND app_id = '%d'" % (user_id, 1)
+    try:
+        # 执行sql语句
+        cursor.execute(sql)
+        # 执行sql语句
+        result = cursor.fetchone()
+        if result == None:
+            return None
+        return result
+    except:
+        # 发生错误时回滚
+        db_conn.rollback()
+    db_conn.close()
+    return None
 
 def participant_query_by_user_id(user_id):
     configs = config_default.configs

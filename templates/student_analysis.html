@@ -20,6 +20,7 @@
     <script type="text/javascript" src="{{url_for("static",filename = "js/student_analysis.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static",filename = "js/echarts/echarts.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static",filename = "js/echarts/macarons.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/logout.js")}}"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 
@@ -38,7 +39,7 @@
         <!-- Navigation Menu  -->
         <nav>
             <ul class="nav navbar-nav">
-                <li><a href="student_home.html#" target="_self"  >Home</a> </li>
+                <li><a href="student_home" target="_self"  >Home</a> </li>
                 <li><a href="#" class="selected">Analysis</a> </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -46,7 +47,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="student_user" target="_self">Settings</a></li>
-                        <li><a href="logout" target="_self">Log out</a></li>
+                        <li><a onclick="logout()" target="_self">Log out</a></li>
                     </ul>
                 </li>
             </ul>

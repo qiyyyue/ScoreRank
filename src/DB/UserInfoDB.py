@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*
 import pymysql
-from configure import config_default
+import config_default
 
 
 def user_register(username, password):
@@ -51,6 +52,33 @@ def user_login(username, password):
     db_conn.close()
     return True
 
+def user_query_role(username):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    user_role = -1
+
+    # SQL 查询语句
+    sql = "SELECT user_role FROM user_info WHERE user_name = '%s'" % (username)
+    try:
+        # 执行SQL语句
+        cursor.execute(sql)
+        # 获取所有记录列表
+        result = cursor.fetchone()
+        if result != None:
+            user_role = result[0]
+    except:
+        print("Error: unable to fetch data")
+        #return False
+
+    # 关闭数据库连接
+    db_conn.close()
+    return user_role
+
 def user_info_update(username, new_username = None, new_password = None, new_email = None, new_country = None, new_city = None, new_timezone = None, new_class = None):
     configs = config_default.configs
     db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
@@ -85,6 +113,43 @@ def user_info_update(username, new_username = None, new_password = None, new_ema
         return False
 
     # 关闭数据库连接
+    db_conn.close()
+    return True
+
+def user_change_username(username, new_username):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+    sql = "UPDATE user_info SET user_name = '%s' WHERE user_name = '%s'" % (new_username, username)
+
+    try:
+        cursor.execute(sql)
+        db_conn.commit()
+    except Exception as e:
+        return False
+
+    db_conn.close()
+    return True
+
+
+def user_change_password(user_name, new_password):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+    sql = "UPDATE user_info SET password = '%s' WHERE user_name = '%s'" % (new_password, user_name)
+
+    try:
+        cursor.execute(sql)
+        db_conn.commit()
+    except Exception as e:
+        return False
+
     db_conn.close()
     return True
 
@@ -138,6 +203,58 @@ def query_user_name_by_id(user_id):
     db_conn.close()
     return user_name
 
+def query_userinfo_by_id(user_id):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    user_name = None
+    # SQL 查询语句
+    sql = "SELECT user_name, continent, country, city FROM user_info WHERE user_id = '%d'" % (user_id)
+    try:
+        # 执行SQL语句
+        cursor.execute(sql)
+        # 获取所有记录列表
+        result = cursor.fetchone()
+        if result:
+            user_info = result
+    except:
+        print("Error: unable to fetch data")
+        return None
+
+    # 关闭数据库连接
+    db_conn.close()
+    return user_info
+
+def query_userinfo_by_username(usernmae):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    user_name = None
+    # SQL 查询语句
+    sql = "SELECT user_name, student_id, birthday, class_id, CI, continent, country, city FROM user_info WHERE user_name = '%s'" % (usernmae)
+    try:
+        # 执行SQL语句
+        cursor.execute(sql)
+        # 获取所有记录列表
+        result = cursor.fetchone()
+        if result:
+            user_info = result
+    except:
+        print("Error: unable to fetch data")
+        return None
+
+    # 关闭数据库连接
+    db_conn.close()
+    return user_info
+
 def query_users_by_loc(continent = None, country = None, city = None):
     configs = config_default.configs
     db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
@@ -149,14 +266,14 @@ def query_users_by_loc(continent = None, country = None, city = None):
     sql = ""
     user_id_list = []
     #查询所有用户
-    if continent == None or continent == "All":
-        sql = "SELECT user_id from user_info"
-    elif country == None or country == "All":
-        sql = "SELECT user_id from user_info WHERE continent = '%s'" % (continent)
-    elif city == None or city == "All":
-        sql = "SELECT user_id from user_info WHERE continent= '%s' and country = '%s'" % (continent, country)
+    if continent == None or continent == "All" or continent == "all":
+        sql = "SELECT user_id from user_info WHERE user_role = 1"
+    elif country == None or country == "All" or continent == "all":
+        sql = "SELECT user_id from user_info WHERE user_role = 1 and continent = '%s'" % (continent)
+    elif city == None or city == "All" or continent == "all":
+        sql = "SELECT user_id from user_info WHERE user_role = 1 and continent= '%s' and country = '%s'" % (continent, country)
     else:
-        sql = "SELECT user_id from user_info WHERE continent = '%s' and country = '%s' and city = '%s'" % (continent, country, city)
+        sql = "SELECT user_id from user_info WHERE user_role = 1 and continent = '%s' and country = '%s' and city = '%s'" % (continent, country, city)
 
     try:
         # 执行sql语句
@@ -172,3 +289,4 @@ def query_users_by_loc(continent = None, country = None, city = None):
         db_conn.rollback()
     db_conn.close()
     return user_id_list
+
