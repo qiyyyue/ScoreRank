@@ -23,7 +23,7 @@
 
 </head>
 
-<body onload = "check_view_option()">
+<body onload = "init_data()">
 
 <!-- check whether the user logged in -->
 
@@ -40,7 +40,7 @@
         <nav>
             <ul class="nav navbar-nav">
                 <li><a href="#" class="selected">Home</a> </li>
-                <li><a href="teacher_analysis.html" target="_self">Analysis</a> </li>
+                <li><a href="teacher_analysis" target="_self">Analysis</a> </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         User<b class="caret"></b>
@@ -94,9 +94,9 @@
             <label for="view_time">range:</label>
             <select id="view_time" onchange="view_option_changed_time()" style="width:80px;">
                 <option selected>all time</option>
-                <option>daily</option>
-                <option>weekly</option>
-                <option>monthly</option>
+                <option>Daily</option>
+                <option>Weekly</option>
+                <option>Monthly</option>
             </select>
         </div>
         <br/><br/>

@@ -5,38 +5,28 @@
     <meta charset="utf-8">
 
     <!-- CSS Files -->
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/animate.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/main_2.css">  <!--customized-->
-    <link rel="stylesheet" type="text/css" href="css/main_3.css">  <!--customized-->
-    <link rel="stylesheet" type="text/css" href="css/main_4.css">  <!--customized-->
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/reset.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/animate.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_2.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_3.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_4.css")}}">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <!-- Javascript Files -->
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/slider.js"></script>
-    <script type="text/javascript" src="js/wow.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/teacher_user.js"></script>  <!--customized -->
+    <script type="text/javascript" src="{{url_for("static",filename = "js/jquery.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/slider.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/wow.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/main.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/bootstrap.min.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/teacher_user.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/logout.js")}}"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 
 <body onload="check_setting_option(0)">
 
 <!-- check whether the user logged in -->
-<?php
-if(!isset($_SESSION['user_id'])){
-    echo "no id"; //test
-//    $home_url = 'index.php';
-//    header('Location: '.$home_url);
-}
-else{
-    echo "id";  //test
-//    $home_url = 'student_analysis.php';
-//    header('Location: '.$home_url);
-}
-?>
 <!-- end check -->
 
 <!-- header Section -->
@@ -44,20 +34,20 @@ else{
     <div class="container">
         <!-- Logo  -->
         <a href="#" class="logo">
-            <img src="img/logo.png" alt="Logo Img"/>
+            <img src="static/img/logo.png" alt="Logo Img"/>
         </a>
         <!-- Navigation Menu  -->
         <nav>
             <ul class="nav navbar-nav">
-                <li><a href="teacher_home.php#" target="_self"  >Home</a> </li>
-                <li><a href="teacher_analysis.php#" target="_self">Analysis</a> </li>
+                <li><a href="teacher_home" target="_self"  >Home</a> </li>
+                <li><a href="teacher_analysis" target="_self">Analysis</a> </li>
                 <li class="dropdown">
                     <a href="#" style="color:#53a7ff;font-weight: bold;" class="dropdown-toggle" data-toggle="dropdown">
                         User<b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Settings</a></li>
-                        <li><a href="logout.php" target="_self">Log out</a></li>
+                        <li><a href="logout()" target="_self">Log out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -73,15 +63,15 @@ else{
         <label class="left_label">Settings</label>
         <ul id="user_nav">
             <li class="nav_li clearfix" onclick="check_setting_option(0)"  id="set_0">
-                <div class="li_icon"><img src="img/icon_1.png"></div>
+                <div class="li_icon"><img src="static/img/icon_1.png"></div>
                 <div class="li_item">APP Weight</div>
             </li>
             <li class="nav_li clearfix" onclick="check_setting_option(1)"  id="set_1">
-                <div class="li_icon"><img src="img/icon_8.png"></div>
+                <div class="li_icon"><img src="static/img/icon_8.png"></div>
                 <div class="li_item">Profile</div>
             </li>
             <li class="nav_li clearfix" onclick="check_setting_option(2)"  id="set_2">
-                <div class="li_icon"><img src="img/icon_10.png"></div>
+                <div class="li_icon"><img src="static/img/icon_10.png"></div>
                 <div class="li_item">Password</div>
             </li>
         </ul>
@@ -100,7 +90,7 @@ else{
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_duo.jpg" class="app_icon">
+                            <img src="static/img/app_icon_duo.jpg" class="app_icon">
                             Duolingo</td>
                         <td id="weight_status_duo" class="status"></td>
                         <td class="edit">
@@ -141,7 +131,7 @@ else{
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_mem.jpg" class="app_icon">
+                            <img src="static/img/app_icon_mem.jpg" class="app_icon">
                             Memrize</td>
                         <td id="weight_status_mem" class="status">Developing</td>
                         <td class="edit">
@@ -164,7 +154,7 @@ else{
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_he.jpg" class="app_icon">
+                            <img src="static/img/app_icon_he.jpg" class="app_icon">
                             Hello Chinese</td>
                         <td id="weight_status_he" class="status">Developing</td>
                         <td class="edit">
@@ -187,7 +177,7 @@ else{
                     <table class="strip_table">
                         <tbody>
                         <td class="strip_name">
-                            <img src="img/app_icon_sk.png" class="app_icon">
+                            <img src="static/img/app_icon_sk.png" class="app_icon">
                             Chinese Skill</td>
                         <td id="weight_status_sk" class="status">Developing</td>
                         <td class="edit">
@@ -376,7 +366,7 @@ else{
 
         <!-- Copyrights  -->
         <div class="copyright animated wow fadeInUp">
-            <img src="img/footer_logo.png" alt="logo img2" class="footer_logo">
+            <img src="static/img/footer_logo.png" alt="logo img2" class="footer_logo">
             <p>© 2018 copyright Aberdeen-Wuhan JRI- All rights reserved. This Site.</p>
         </div>
 

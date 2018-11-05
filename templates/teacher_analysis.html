@@ -5,39 +5,28 @@
     <meta charset="utf-8">
 
     <!-- CSS Files -->
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/animate.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/main_2.css">  <!--customized-->
-    <link rel="stylesheet" type="text/css" href="css/main_3.css">  <!--customized-->
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/reset.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/animate.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_2.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for("static",filename = "css/main_3.css")}}">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <!-- Javascript Files -->
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/slider.js"></script>
-    <script type="text/javascript" src="js/wow.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/teacher_analysis.js"></script>  <!--customized -->
+    <script type="text/javascript" src="{{url_for("static",filename = "js/jquery.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/slider.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/wow.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/main.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/teacher_analysis.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/echarts/echarts.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/echarts/macarons.js")}}"></script>
+    <script type="text/javascript" src="{{url_for("static",filename = "js/logout.js")}}"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/echarts/echarts.js"></script>  <!--echarts-->
-    <script type="text/javascript" src="js/echarts/macarons.js"></script>  <!--echarts-theme-->
 </head>
 
 <body onload="check_li_option(0)">
 
 <!-- check whether the user logged in -->
-<?php
-if(!isset($_SESSION['user_id'])){
-    echo "no id"; //test
-//    $home_url = 'index.php';
-//    header('Location: '.$home_url);
-}
-else{
-    echo "id";  //test
-//    $home_url = 'student_analysis.php';
-//    header('Location: '.$home_url);
-}
-?>
 <!-- end check -->
 
 <!-- header Section -->
@@ -45,20 +34,20 @@ else{
     <div class="container">
         <!-- Logo  -->
         <a href="#" class="logo">
-            <img src="img/logo.png" alt="Logo Img"/>
+            <img src="static/img/logo.png" alt="Logo Img"/>
         </a>
         <!-- Navigation Menu  -->
         <nav>
             <ul class="nav navbar-nav">
-                <li><a href="teacher_home.php#" target="_self"  >Home</a> </li>
+                <li><a href="teacher_home" target="_self"  >Home</a> </li>
                 <li><a href="#" class="selected">Analysis</a> </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         User<b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="teacher_user.html#" target="_self">Settings</a></li>
-                        <li><a href="logout.php" target="_self">Log out</a></li>
+                        <li><a href="teacher_user" target="_self">Settings</a></li>
+                        <li><a href="logout()" target="_self">Log out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -74,11 +63,11 @@ else{
         <label class="left_label">Analysis</label>
         <ul id="user_nav">
             <li class="nav_li clearfix" onclick="check_li_option(0)"  id="li_0">
-                <div class="li_icon"><img src="img/icon_2.png"></div>
+                <div class="li_icon"><img src="static/img/icon_2.png"></div>
                 <div class="li_item">Class Ranking</div>
             </li>
             <li class="nav_li clearfix" onclick="check_li_option(1)"  id="li_1">
-                <div class="li_icon"><img src="img/icon_7.png"></div>
+                <div class="li_icon"><img src="static/img/icon_7.png"></div>
                 <div class="li_item">Student Score</div>
             </li>
         </ul>
@@ -211,7 +200,7 @@ else{
 
         <!-- Copyrights  -->
         <div class="copyright animated wow fadeInUp">
-            <img src="img/footer_logo.png" alt="logo img2" class="footer_logo">
+            <img src="static/img/footer_logo.png" alt="logo img2" class="footer_logo">
             <p>© 2018 copyright Aberdeen-Wuhan JRI- All rights reserved. This Site.</p>
         </div>
 
