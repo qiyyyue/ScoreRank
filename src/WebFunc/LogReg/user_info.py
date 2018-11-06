@@ -74,7 +74,7 @@ def login():
     username = request.form.get('username', None)
     password = request.form.get('password', None)
 
-    print(username, password)
+    #print(username, password)
 
 
     if user_login(username, password):

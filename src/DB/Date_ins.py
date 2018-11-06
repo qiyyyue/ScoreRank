@@ -2,8 +2,61 @@
 import random
 import datetime
 import pymysql
-import config_default
-#from configure import config_default
+#import config_default
+from configure import config_default
+
+
+def stu_info_ins(username, pwd, student_name, continent, country, city, stu_number, birthday, CI):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    insert_id = -1
+    # SQL 插入语句
+    sql = "INSERT INTO student_info(user_name, password, student_name, country, city, continent, student_number, birthday, CI) " \
+          "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', str_to_date('%s','%%Y-%%m-%%d'), '%s')" \
+          % (username, pwd, student_name, country, city, continent, stu_number, birthday, CI)
+    try:
+        # 执行sql语句
+        cursor.execute(sql)
+        # 执行sql语句
+        insert_id = db_conn.insert_id()
+        db_conn.commit()
+    except:
+        # 发生错误时回滚
+        db_conn.rollback()
+        return -1
+    db_conn.close()
+    return insert_id
+
+def tc_info_ins(username, pwd, teacher_name, continent, country, city, teacher_number, birthday, CI):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    insert_id = -1
+    # SQL 插入语句
+    sql = "INSERT INTO teacher_info(user_name, password, teacher_name, country, city, continent, teacher_number, birthday, CI) " \
+          "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', str_to_date('%s','%%Y-%%m-%%d'), '%s')" \
+          % (username, pwd, teacher_name, country, city, continent, teacher_number, birthday, CI)
+    try:
+        # 执行sql语句
+        cursor.execute(sql)
+        # 执行sql语句
+        insert_id = db_conn.insert_id()
+        db_conn.commit()
+    except:
+        # 发生错误时回滚
+        db_conn.rollback()
+        return -1
+    db_conn.close()
+    return insert_id
 
 def user_info_ins(username, pwd, name, class_id, continent, country, city, timezone, stu_id, birthday, CI):
     configs = config_default.configs
@@ -31,7 +84,7 @@ def user_info_ins(username, pwd, name, class_id, continent, country, city, timez
     db_conn.close()
     return insert_id
 
-def per_ins(user_id, date, point, daily_point):
+def per_ins(stu_id, date, point, daily_point):
     configs = config_default.configs
     db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
                               configs['scorerank_db']['password'], configs['scorerank_db']['database'])
@@ -40,8 +93,8 @@ def per_ins(user_id, date, point, daily_point):
     cursor = db_conn.cursor()
     insert_id = -1
     # SQL 插入语句
-    sql = "INSERT INTO performance(user_id, app_id, date_time, current_level, current_point, daily_point) VALUES " \
-          "('%d', '%d', str_to_date('%s','%%Y-%%m-%%d'),'%d', '%d', '%d')" % (user_id, 1, date, point/100 + 1, point, daily_point)
+    sql = "INSERT INTO performance(student_id, app_id, date_time, current_level, current_point, daily_point) VALUES " \
+          "('%d', '%d', str_to_date('%s','%%Y-%%m-%%d'),'%d', '%d', '%d')" % (stu_id, 1, date, point/100 + 1, point, daily_point)
     try:
         # 执行sql语句
         cursor.execute(sql)
@@ -55,13 +108,13 @@ def per_ins(user_id, date, point, daily_point):
     db_conn.close()
     return insert_id
 
-def make_data(user_id):
+def make_data(stu_id):
     current_point = 0
     current_date = datetime.datetime.now() + datetime.timedelta(days=-30)
-    for i in range(30):
+    for i in range(31):
         tmp_point = random.randint(0, 100)
         current_point += tmp_point
-        per_ins(user_id, current_date.strftime('%Y-%m-%d'), current_point, tmp_point)
+        per_ins(stu_id, current_date.strftime('%Y-%m-%d'), current_point, tmp_point)
         #print(current_date.strftime('%Y-%m-%d'), current_point)
         current_date += datetime.timedelta(days=1)
 
@@ -265,15 +318,17 @@ def performance_query_monthly_by_id(user_id):
     db_conn.close()
     return 0
 
+#(username, pwd, student_name, continent, country, city, stu_number, birthday, CI):
 #(username, pwd, name, class_id, continent, country, city, timezone, stu_id, birthday, CI):
 # name_list = ['Edith', 'Emma', 'Jessie', 'Abby', 'Anne', 'Bella', 'Colin', 'Amy', 'Sarah', 'Kate', 'Ashley', 'Larissa']
-# i = 1009
+# name_list = ['teacher1', 'teacher2']
+# i = 1001
 # for name in name_list:
-#     user_info_ins(name, '123456', name, 1, 'Europe', 'UK', 'London', 'UTC', str(i), '1995-10-01',
+#     tc_info_ins(name, '123456', name, 'Europe', 'UK', 'Aberdeen', "tc" + str(i), '1995-10-01',
 #                   'The Confucius Institute of the University of Aberdeen')
 #     i += 1
-for i in range(2, 21):
-    make_data(i)
+# for i in range(1, 13):
+#     make_data(i)
 
 # make_data(8)
 #print(query_users_by_loc(country='Scotland', city='Edinburgh'))

@@ -6,23 +6,23 @@
 
 from flask import request, session, json
 from flask import Blueprint, render_template, redirect
-from UserInfoDB import *
+from StudentInfoDB import *
 from ParticipantDB import *
 from PerformanceDB import *
 from AppInfoDB import *
 from DuolingoAPI import *
 
-home = Blueprint('home',__name__)
+stu_home_bp = Blueprint('stu_home_bp',__name__)
 
-@home.route("/GetRank", methods=["POST", 'GET'])
-def get_rank():
+@stu_home_bp.route("/StuGetRank", methods=["POST", 'GET'])
+def student_get_rank():
     username = request.form['username']
 
-    user_id = user_query_id_by_name(username)
-    if user_id == -1:
+    stu_id = stu_query_id_by_name(username)
+    if stu_id == -1:
         return json.dumps({"code": "False", 'msg': 'wrong username'}, ensure_ascii=False)
 
-    rank = performance_get_rank(user_id)
+    rank = performance_get_rank(stu_id)
 
     # print("rank   " + str(rank))
     if rank != -1:
@@ -30,41 +30,41 @@ def get_rank():
     else:
         return json.dumps({"code": "False", 'msg': 'get rank fail'}, ensure_ascii=False)
 
-@home.route("/GetPoint", methods=["POST", 'GET'])
-def get_point():
+@stu_home_bp.route("/StuGetPoint", methods=["POST", 'GET'])
+def student_get_point():
     username = request.form['username']
 
-    user_id = user_query_id_by_name(username)
-    if user_id == -1:
+    student_id = stu_query_id_by_name(username)
+    if student_id == -1:
         return json.dumps({"code": "False", 'msg': 'wrong username'}, ensure_ascii=False)
 
-    point = performance_get_point(user_id)
+    point = performance_get_point(student_id)
     # print("point   " + str(point))
     if point != -1:
         return json.dumps({"code": "True", 'msg': '', "point": point}, ensure_ascii=False)
     else:
         return json.dumps({"code": "False", 'msg': 'get point fail'}, ensure_ascii=False)
 
-@home.route("/GetRankPoint", methods=["POST",'GET'])
-def get_rank_point():
+@stu_home_bp.route("/StuGetRankPoint", methods=["POST",'GET'])
+def student_get_rank_point():
     username = request.form['username']
 
-    user_id = user_query_id_by_name(username)
-    if user_id == -1:
+    student_id = stu_query_id_by_name(username)
+    if student_id == -1:
         return json.dumps({"code": "False", 'msg': 'wrong username'}, ensure_ascii=False)
 
-    point = performance_get_point(user_id)
-    rank = performance_get_rank(user_id)
+    point = performance_get_point(student_id)
+    rank = performance_get_rank(student_id)
     if point != -1 and rank != -1:
         return json.dumps({"code": "True", 'msg': '', "point": point, 'rank': rank}, ensure_ascii=False)
     else:
         return json.dumps({"code": "False", 'msg': 'get rank and point fail'}, ensure_ascii=False)
 
-@home.route("GetSelfInfo", methods=['POST', 'GET'])
+@stu_home_bp.route("GetSelfInfo", methods=['POST', 'GET'])
 def get_self_info():
     return None
 
-@home.route("/GetVisitorLeaderBoard", methods=['POST', 'GET'])
+@stu_home_bp.route("/GetVisitorLeaderBoard", methods=['POST', 'GET'])
 def get_visitor_leaderboard():
     continent = request.form.get('continent', None)
     country = request.form.get('country', None)
@@ -73,23 +73,23 @@ def get_visitor_leaderboard():
     period = request.form.get('period', None)
 
     try:
-        user_list = query_users_by_loc(continent, country, city)
+        user_list = stu_query_stus_by_loc(continent, country, city)
         rank_list = []
-        for user_id in user_list:
-            user_info = query_userinfo_by_id(user_id)
+        for student_id in user_list:
+            user_info = stu_query_info_by_id(student_id)
             user_name = user_info[0]
             if period == "Daily":
-                point = performance_query_daily_by_id(user_id)
-                old_point = performance_query_pre_daily_by_id(user_id)
+                point = performance_query_daily_by_id(student_id)
+                old_point = performance_query_pre_daily_by_id(student_id)
             elif period == "Weekly":
-                point = performance_query_weekly_by_id(user_id)
-                old_point = performance_query_pre_weekly_by_id(user_id)
+                point = performance_query_weekly_by_id(student_id)
+                old_point = performance_query_pre_weekly_by_id(student_id)
             elif period == "Monthly":
-                point = performance_query_monthly_by_id(user_id)
-                old_point = performance_query_pre_monthly_by_id(user_id)
+                point = performance_query_monthly_by_id(student_id)
+                old_point = performance_query_pre_monthly_by_id(student_id)
             else:
-                point = performance_query_all_by_id(user_id)
-                old_point = performance_query_pre_daily_by_id(user_id)
+                point = performance_query_all_by_id(student_id)
+                old_point = performance_query_pre_daily_by_id(student_id)
             rank_list.append({'username': user_name, 'continent': user_info[1], 'country': user_info[2], 'city': user_info[3], 'point': point, 'old_point': old_point})
         rank_list.sort(key=lambda user_info: user_info['old_point'], reverse = True)
         for old_rank in range(len(rank_list)):
@@ -113,7 +113,7 @@ def get_visitor_leaderboard():
     except:
         return json.dumps({"code": "False", 'msg': 'query fail'}, ensure_ascii=False)
 
-@home.route("/GetTeacherLeaderBoard", methods=['POST', 'GET'])
+@stu_home_bp.route("/GetTeacherLeaderBoard", methods=['POST', 'GET'])
 def get_teacher_leaderboard():
     continent = request.form.get('continent', None)
     country = request.form.get('country', None)
@@ -122,23 +122,23 @@ def get_teacher_leaderboard():
     period = request.form.get('period', None)
 
     try:
-        user_list = query_users_by_loc(continent, country, city)
+        user_list = stu_query_stus_by_loc(continent, country, city)
         rank_list = []
-        for user_id in user_list:
-            user_info = query_userinfo_by_id(user_id)
+        for student_id in user_list:
+            user_info = stu_query_info_by_id(student_id)
             user_name = user_info[0]
             if period == "Daily":
-                point = performance_query_daily_by_id(user_id)
-                old_point = performance_query_pre_daily_by_id(user_id)
+                point = performance_query_daily_by_id(student_id)
+                old_point = performance_query_pre_daily_by_id(student_id)
             elif period == "Weekly":
-                point = performance_query_weekly_by_id(user_id)
-                old_point = performance_query_pre_weekly_by_id(user_id)
+                point = performance_query_weekly_by_id(student_id)
+                old_point = performance_query_pre_weekly_by_id(student_id)
             elif period == "Monthly":
-                point = performance_query_monthly_by_id(user_id)
-                old_point = performance_query_pre_monthly_by_id(user_id)
+                point = performance_query_monthly_by_id(student_id)
+                old_point = performance_query_pre_monthly_by_id(student_id)
             else:
-                point = performance_query_all_by_id(user_id)
-                old_point = performance_query_pre_daily_by_id(user_id)
+                point = performance_query_all_by_id(student_id)
+                old_point = performance_query_pre_daily_by_id(student_id)
             rank_list.append({'username': user_name, 'continent': user_info[1], 'country': user_info[2], 'city': user_info[3], 'point': point, 'old_point': old_point})
         rank_list.sort(key=lambda user_info: user_info['old_point'], reverse = True)
         for old_rank in range(len(rank_list)):
@@ -166,7 +166,7 @@ def get_teacher_leaderboard():
 ##continent, country, city, period, username.
 ##返回{code, msg, leader_board_list, self_info}
 ##leader_board_list:{username, continent, country, city, point, old_point, old_rank, rank, status}
-@home.route("/GetLeaderBoard", methods=['POST', 'GET'])
+@stu_home_bp.route("/GetLeaderBoard", methods=['POST', 'GET'])
 def get_leaderboard():
     continent = request.form.get('continent', None)
     country = request.form.get('country', None)
@@ -176,24 +176,24 @@ def get_leaderboard():
     period = request.form.get('period', None)
 
     try:
-        user_list = query_users_by_loc(continent, country, city)
+        user_list = stu_query_stus_by_loc(continent, country, city)
         rank_list = []
         self_info = {}
-        for user_id in user_list:
-            user_info = query_userinfo_by_id(user_id)
+        for student_id in user_list:
+            user_info = stu_query_info_by_id(student_id)
             user_name = user_info[0]
             if period == "Daily":
-                point = performance_query_daily_by_id(user_id)
-                old_point = performance_query_pre_daily_by_id(user_id)
+                point = performance_query_daily_by_id(student_id)
+                old_point = performance_query_pre_daily_by_id(student_id)
             elif period == "Weekly":
-                point = performance_query_weekly_by_id(user_id)
-                old_point = performance_query_pre_weekly_by_id(user_id)
+                point = performance_query_weekly_by_id(student_id)
+                old_point = performance_query_pre_weekly_by_id(student_id)
             elif period == "Monthly":
-                point = performance_query_monthly_by_id(user_id)
-                old_point = performance_query_pre_monthly_by_id(user_id)
+                point = performance_query_monthly_by_id(student_id)
+                old_point = performance_query_pre_monthly_by_id(student_id)
             else:
-                point = performance_query_all_by_id(user_id)
-                old_point = performance_query_pre_daily_by_id(user_id)
+                point = performance_query_all_by_id(student_id)
+                old_point = performance_query_pre_daily_by_id(student_id)
             rank_list.append({'username': user_name, 'continent': user_info[1], 'country': user_info[2], 'city': user_info[3], 'point': point, 'old_point': old_point})
         rank_list.sort(key=lambda user_info: user_info['old_point'], reverse = True)
         for old_rank in range(len(rank_list)):

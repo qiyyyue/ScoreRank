@@ -2,60 +2,60 @@ import datetime
 
 from flask import request, session, json
 from flask import Blueprint, render_template, redirect
-from UserInfoDB import *
+from StudentInfoDB import *
 from PerformanceDB import *
 from AppInfoDB import *
 from DuolingoAPI import *
 
-analysis = Blueprint('analysis', __name__)
+stu_analysis_bp = Blueprint('stu_analysis', __name__)
 
-@analysis.route("/GetHistoryRank", methods=["POST", 'GET'])
+@stu_analysis_bp.route("/GetHistoryRank", methods=["POST", 'GET'])
 def get_history_rank():
     period = request.form['period']
     username = request.form['username']
 
-    user_id = user_query_id_by_name(username)
-    if user_id == -1:
+    stu_id = stu_query_id_by_name(username)
+    if stu_id == -1:
         return json.dumps({"code": "False", 'msg': 'wrong username'}, ensure_ascii=False)
 
     if period == 'Weekly':
-        history_rank_list = performance_get_history_rank_by_id(user_id)
+        history_rank_list = performance_get_history_rank_by_id(stu_id)
     else:
-        history_rank_list = performance_get_history_rank_by_id(user_id)
+        history_rank_list = performance_get_history_rank_by_id(stu_id)
 
-    print(history_rank_list)
+    # print(history_rank_list)
     return json.dumps({"code": "True", 'msg': '', "history_rank_list": history_rank_list}, ensure_ascii=False)
 
 
-@analysis.route("/GetHistoryPoint", methods=["POST", 'GET'])
+@stu_analysis_bp.route("/GetHistoryPoint", methods=["POST", 'GET'])
 def get_history_point():
     period = request.form['period']
     username = request.form['username']
 
-    user_id = user_query_id_by_name(username)
-    if user_id == -1:
+    stu_id = user_query_id_by_name(username)
+    if stu_id == -1:
         return json.dumps({"code": "False", 'msg': 'wrong username'}, ensure_ascii=False)
 
     if period == 'Weekly':
-        history_point_list = performance_get_history_point_by_id(user_id)
+        history_point_list = performance_get_history_point_by_id(stu_id)
     else:
-        history_point_list = performance_get_history_point_by_id(user_id)
+        history_point_list = performance_get_history_point_by_id(stu_id)
 
     print(history_point_list)
     return json.dumps({"code": "True", 'msg': '', "history_point_list": history_point_list}, ensure_ascii=False)
 
-@analysis.route("/GetHistoryAvgPoint", methods=["POST", 'GET'])
+@stu_analysis_bp.route("/GetHistoryAvgPoint", methods=["POST", 'GET'])
 def get_history_avg_point():
     period = request.form['period']
     username = request.form['username']
 
-    user_info = query_userinfo_by_username(username)
+    stu_info = stu_query_info_by_username(username)
     avg_his_point_list = [0 for i in range(7)]
     try:
-        user_list = query_users_by_loc(user_info[5], user_info[6], user_info[7])
+        stu_list = stu_query_stus_by_loc(stu_info[5], stu_info[6], stu_info[7])
         count = 0
-        for user_id in user_list:
-            tmp_his_point_list = performance_get_history_point_by_id(user_id)
+        for stu_id in stu_list:
+            tmp_his_point_list = performance_get_history_point_by_id(stu_id)
             for i in range(len(avg_his_point_list)):
                 avg_his_point_list[i] += tmp_his_point_list[i]
             count += 1
@@ -63,12 +63,13 @@ def get_history_avg_point():
             for i in range(len(avg_his_point_list)):
                 avg_his_point_list[i] = int(avg_his_point_list[i]/count)
     except Exception as e:
-        return json.dumps({"code": "False", 'msg': ''}, ensure_ascii=False)
         print(e)
+        return json.dumps({"code": "False", 'msg': ''}, ensure_ascii=False)
+        #print(e)
 
     return json.dumps({"code": "True", 'msg': '', "history_avg_point_list": avg_his_point_list}, ensure_ascii=False)
 
-@analysis.route("/GetHistoryDate", methods=["POST", 'GET'])
+@stu_analysis_bp.route("/GetHistoryDate", methods=["POST", 'GET'])
 def get_history_date():
     period = request.form['period']
     username = request.form['username']
@@ -98,7 +99,7 @@ def get_history_date():
 
 
 # -------------------------------------------------------------------------------------------------
-@analysis.route("/GetRank", methods=["POST", 'GET'])
+@stu_analysis_bp.route("/GetRank", methods=["POST", 'GET'])
 def get_rank():
     username = request.form['username']
 
@@ -112,7 +113,7 @@ def get_rank():
     else:
         return json.dumps({"code": "False", 'msg': 'get rank fail'}, ensure_ascii=False)
 
-@analysis.route("/GetRankAndPoint", methods=["POST", 'GET'])
+@stu_analysis_bp.route("/GetRankAndPoint", methods=["POST", 'GET'])
 def get_rank_point():
     username = request.form['username']
 
@@ -126,7 +127,7 @@ def get_rank_point():
     else:
         return json.dumps({"code": "False", 'msg': 'get rank fail'}, ensure_ascii=False)
 
-@analysis.route("/GetLeaderBoard", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoard", methods=['POST', 'GET'])
 def get_leader_board():
     leader_board_list = performance_get_all_rank()
 
@@ -135,7 +136,7 @@ def get_leader_board():
     else:
         return json.dumps({"code": "False", 'msg': 'get leaderboard fail'}, ensure_ascii=False)
 
-@analysis.route("/GetLeaderBoardAllDaily", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoardAllDaily", methods=['POST', 'GET'])
 def get_leader_board_All_daily():
     try:
         user_list = query_users_by_loc()
@@ -154,7 +155,7 @@ def get_leader_board_All_daily():
     except:
         return json.dumps({"code": "False", 'msg': 'query erro'}, ensure_ascii=False)
 
-@analysis.route("/GetLeaderBoardAllWeekly", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoardAllWeekly", methods=['POST', 'GET'])
 def get_leader_board_All_weekly():
     try:
         user_list = query_users_by_loc()
@@ -172,7 +173,7 @@ def get_leader_board_All_weekly():
     except:
         return json.dumps({"code": "False", 'msg': 'query erro'}, ensure_ascii=False)
 
-@analysis.route("/GetLeaderBoardAllMonthly", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoardAllMonthly", methods=['POST', 'GET'])
 def get_leader_board_All_Monthly():
     try:
         user_list = query_users_by_loc()
@@ -189,7 +190,7 @@ def get_leader_board_All_Monthly():
     except:
         return json.dumps({"code": "False", 'msg': 'query erro'}, ensure_ascii=False)
 
-@analysis.route("/GetLeaderBoardCountryDaily", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoardCountryDaily", methods=['POST', 'GET'])
 def get_leader_board_country_daily():
     country = request.form['country']
     try:
@@ -207,7 +208,7 @@ def get_leader_board_country_daily():
     except:
         return json.dumps({"code": "False", 'msg': 'query erro'}, ensure_ascii=False)
 
-@analysis.route("/GetLeaderBoardCountryWeekly", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoardCountryWeekly", methods=['POST', 'GET'])
 def get_leader_board_country_weekly():
     country = request.form['country']
     try:
@@ -226,7 +227,7 @@ def get_leader_board_country_weekly():
         return json.dumps({"code": "False", 'msg': 'query erro'}, ensure_ascii=False)
 
 
-@analysis.route("/GetLeaderBoardCountryMonthly", methods=['POST', 'GET'])
+@stu_analysis_bp.route("/GetLeaderBoardCountryMonthly", methods=['POST', 'GET'])
 def get_leader_board_country_monthly():
     country = request.form['country']
     try:
