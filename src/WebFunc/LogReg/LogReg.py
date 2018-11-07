@@ -2,7 +2,7 @@ from flask import request, session, json
 from StudentInfoDB import *
 from TeacherInfoDB import *
 from flask import Blueprint, render_template, redirect, make_response
-log_reg_bp = Blueprint('user_info',__name__)
+log_reg_bp = Blueprint('log_reg_bp',__name__)
 
 @log_reg_bp.route('/Login', methods=['POST', 'GET'])
 def login():

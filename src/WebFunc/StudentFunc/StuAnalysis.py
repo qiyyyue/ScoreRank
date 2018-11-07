@@ -7,7 +7,7 @@ from PerformanceDB import *
 from AppInfoDB import *
 from DuolingoAPI import *
 
-stu_analysis_bp = Blueprint('stu_analysis', __name__)
+stu_analysis_bp = Blueprint('stu_analysis_bp', __name__)
 
 @stu_analysis_bp.route("/GetHistoryRank", methods=["POST", 'GET'])
 def get_history_rank():
@@ -32,7 +32,7 @@ def get_history_point():
     period = request.form['period']
     username = request.form['username']
 
-    stu_id = user_query_id_by_name(username)
+    stu_id = stu_query_id_by_name(username)
     if stu_id == -1:
         return json.dumps({"code": "False", 'msg': 'wrong username'}, ensure_ascii=False)
 

@@ -65,7 +65,7 @@ function Profile_init() {
 
     try
     {
-        $.post("/setting/GetSelfInfo", {username: sessionStorage.getItem('username')},
+        $.post("/stu_setting/StuGetSelfInfo", {username: sessionStorage.getItem('username')},
             function (data)
             {
                 var req_data = JSON.parse(data);
@@ -134,7 +134,7 @@ function bind_app(app,flag){
 
                     try
                     {
-                        $.post("/setting/LinkDuolingo", {username: sessionStorage.getItem('username'), duo_username: account, duo_password: passwd},
+                        $.post("/stu_setting/StuLinkDuolingo", {username: sessionStorage.getItem('username'), duo_username: account, duo_password: passwd},
                             function (data)
                             {
                                 var req_data = JSON.parse(data);
@@ -216,7 +216,7 @@ function edit_username(flag) {
 
                 try
                 {
-                    $.post("/setting/UserChangeUsername", {username: sessionStorage.getItem('username'), new_username: new_username},
+                    $.post("/stu_setting/StuChangeUsername", {username: sessionStorage.getItem('username'), new_username: new_username},
                         function (data)
                         {
                             var req_data = JSON.parse(data);
@@ -272,7 +272,7 @@ function edit_passwd(flag) {
 
             try
             {
-                $.post("/setting/UserChangePassword", {username: sessionStorage.getItem('username'), password: p1},
+                $.post("/stu_setting/StuChangePassword", {username: sessionStorage.getItem('username'), password: p1},
                     function (data)
                     {
                         var req_data = JSON.parse(data);

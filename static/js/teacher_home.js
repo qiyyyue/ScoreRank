@@ -34,13 +34,14 @@ function init_rank_data(continent, country, city, period )
             async : false
         });
 
-        $.post("/home/GetTeacherLeaderBoard", {continent: continent, country: country, city: city, period: period, username: sessionStorage.getItem("username")},
+        $.post("/tc_home/GetTcLeaderBoard", {continent: continent, country: country, city: city, period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
             if (req_data['code'] == 'True')
             {
                 rank_list = req_data['leader_board_list'];
+                console.log(rank_list);
                 // self_info = req_data['self_info']
                 // alert("flag_l");
                 // flag_l = true;

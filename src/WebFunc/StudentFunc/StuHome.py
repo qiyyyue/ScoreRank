@@ -193,7 +193,7 @@ def get_leaderboard():
                 old_point = performance_query_pre_monthly_by_id(student_id)
             else:
                 point = performance_query_all_by_id(student_id)
-                old_point = performance_query_pre_daily_by_id(student_id)
+                old_point = performance_query_pre_all_by_id(student_id)
             rank_list.append({'username': user_name, 'continent': user_info[1], 'country': user_info[2], 'city': user_info[3], 'point': point, 'old_point': old_point})
         rank_list.sort(key=lambda user_info: user_info['old_point'], reverse = True)
         for old_rank in range(len(rank_list)):

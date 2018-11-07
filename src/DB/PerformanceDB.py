@@ -620,7 +620,7 @@ def performance_get_rank_id_day(stu_id, day):
     # 使用 cursor() 方法创建一个游标对象 cursor
     cursor = db_conn.cursor()
 
-    sql = "SELECT student_id, current_point FROM performance WHERE date_time = str_to_date('%s','%%Y-%%m-%%d') ORDER BY current_point DESC" % (day.strftime('%Y-%m-%d'))
+    sql = "SELECT student_id, daily_point FROM performance WHERE date_time = str_to_date('%s','%%Y-%%m-%%d') ORDER BY daily_point DESC" % (day.strftime('%Y-%m-%d'))
     try:
         cursor.execute(sql)
         results = cursor.fetchall()
@@ -631,13 +631,11 @@ def performance_get_rank_id_day(stu_id, day):
             # print(line)
             if line[0] != stu_id:
                 tmp_rank += 1
-            else:
-                return tmp_rank
     except Exception as e:
         print(e)
         db_conn.rollback()
     db_conn.close()
-    return 0
+    return tmp_rank
 
 def performance_get_yestoday_point(student_id):
     configs = config_default.configs
@@ -694,7 +692,7 @@ def performance_update_score_till_now(student_id):
 
 
     #
-    now_time = datetime.datetime.now()
+    now_time = datetime.datetime.now() + datetime.timedelta(days=-1)
     while old_time < now_time:
         old_time += datetime.timedelta(days=1)
         tmp_point = random.randint(0, 100)

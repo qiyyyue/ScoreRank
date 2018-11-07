@@ -34,7 +34,7 @@ function init_rank_data(continent, country, city, period )
             async : false
         });
 
-        $.post("/home/GetLeaderBoard", {continent: continent, country: country, city: city, period: period, username: sessionStorage.getItem("username")},
+        $.post("/stu_home/GetLeaderBoard", {continent: continent, country: country, city: city, period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);

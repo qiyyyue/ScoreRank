@@ -88,3 +88,70 @@ def tc_change_password(user_name, new_password):
 
     db_conn.close()
     return True
+
+def tc_query_info_by_username(usernmae):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+
+    # user_name = None
+    tc_info = None
+    # SQL 查询语句
+    sql = "SELECT user_name, teacher_name, birthday, teacher_number, CI, continent, country, city FROM teacher_info WHERE user_name = '%s'" % (usernmae)
+    try:
+        # 执行SQL语句
+        cursor.execute(sql)
+        # 获取所有记录列表
+        result = cursor.fetchone()
+        if result:
+            tc_info = result
+    except Exception as e:
+        print(e)
+        return None
+
+    # 关闭数据库连接
+    db_conn.close()
+    return tc_info
+
+def tc_query_name_by_id(teacher_id):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+    sql = "Select teacher_name From teacher_info Where teacher_id = '%d'" % (teacher_id)
+
+    teacher_name = None
+    try:
+        cursor.execute(sql)
+        result = cursor.fetchone()
+        teacher_name = result[0]
+    except Exception as e:
+        db_conn.rollback()
+
+    db_conn.close()
+    return teacher_name
+
+def tc_query_id_by_name(user_name):
+    configs = config_default.configs
+    db_conn = pymysql.connect(configs['scorerank_db']['host'], configs['scorerank_db']['user'],
+                              configs['scorerank_db']['password'], configs['scorerank_db']['database'])
+
+    # 使用 cursor() 方法创建一个游标对象 cursor
+    cursor = db_conn.cursor()
+    sql = "Select teacher_id From teacher_info Where user_name = '%s'" % (user_name)
+
+    teacher_id = None
+    try:
+        cursor.execute(sql)
+        result = cursor.fetchone()
+        teacher_id = result[0]
+    except Exception as e:
+        db_conn.rollback()
+
+    db_conn.close()
+    return teacher_id

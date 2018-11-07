@@ -322,13 +322,14 @@ def performance_query_monthly_by_id(user_id):
 #(username, pwd, name, class_id, continent, country, city, timezone, stu_id, birthday, CI):
 # name_list = ['Edith', 'Emma', 'Jessie', 'Abby', 'Anne', 'Bella', 'Colin', 'Amy', 'Sarah', 'Kate', 'Ashley', 'Larissa']
 # name_list = ['teacher1', 'teacher2']
-# i = 1001
+# name_list = ['Carson', 'Bailey', 'Bryan', 'Edward', 'Jaden', 'Diego']
+# i = 10013
 # for name in name_list:
-#     tc_info_ins(name, '123456', name, 'Europe', 'UK', 'Aberdeen', "tc" + str(i), '1995-10-01',
+#     stu_info_ins(name, '123456', name, 'Europe', 'UK', 'Edinburgh', str(i), '1995-10-01',
 #                   'The Confucius Institute of the University of Aberdeen')
 #     i += 1
-# for i in range(1, 13):
-#     make_data(i)
+for i in range(13, 19):
+    make_data(i)
 
 # make_data(8)
 #print(query_users_by_loc(country='Scotland', city='Edinburgh'))

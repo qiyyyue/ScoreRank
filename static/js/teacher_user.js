@@ -1,3 +1,11 @@
+function check_login()
+{
+    if (!sessionStorage.getItem('username'))
+    {
+        window.location.href = '/';
+    }
+}
+
 function check_setting_option(set_option) {
     document.getElementById("item_weight").style.display ='none';
     document.getElementById("item_profile").style.display ='none';
@@ -27,6 +35,35 @@ function weight_init() {
     //.........
     var weight = 7;
 
+    $.ajaxSetup({
+        async : false
+    });
+
+    try
+    {
+        $.post("/tc_setting/TcGetWight", {username: sessionStorage.getItem('username'), app_id: 1},
+            function (data)
+            {
+                var req_data = JSON.parse(data);
+                if (req_data['code'] == 'True')
+                {
+                    weight = req_data['weight'];
+                    // console.log(user_self_info);
+                }
+                else
+                {
+                    // console.log('false');
+                }
+            });
+    }
+    catch (e)
+    {
+        // console.log("wrong");
+        // console.log(e.toString());
+        // alert('Fail to bind! Please check your account and password.');
+    }
+
+
     document.getElementById("weight_status_duo").innerHTML = weight;
     document.getElementById("weight_value_duo").value = weight;
 
@@ -41,20 +78,42 @@ function Profile_init() {
     //get personal information from back-end
     //...............
 
-    var jsonData = {
-        c1: "Mary Jones",
-        c2: "56372",
-        c3: "1,3,4",
-        c4: "The Confucius Institute of the University of Aberdeen",
-        c5: "Aberdeen",
-        c6: "UK"
-    };
-    document.getElementById("prof_name").innerHTML = jsonData.c1;
-    document.getElementById("prof_id").innerHTML = jsonData.c2;
-    document.getElementById("prof_class").innerHTML = jsonData.c3;
-    document.getElementById("prof_ci").innerHTML = jsonData.c4;
-    document.getElementById("prof_city").innerHTML = jsonData.c5;
-    document.getElementById("prof_cr").innerHTML = jsonData.c6;
+    var user_self_info = {};
+
+    $.ajaxSetup({
+        async : false
+    });
+
+    try
+    {
+        $.post("/tc_setting/TcGetSelfInfo", {username: sessionStorage.getItem('username')},
+            function (data)
+            {
+                var req_data = JSON.parse(data);
+                if (req_data['code'] == 'True')
+                {
+                    user_self_info = req_data['self_info'];
+                    // console.log(user_self_info);
+                }
+                else
+                {
+                    // console.log('false');
+                }
+            });
+    }
+    catch (e)
+    {
+        // console.log("wrong");
+        // console.log(e.toString());
+        // alert('Fail to bind! Please check your account and password.');
+    }
+
+    document.getElementById("prof_name").innerHTML = user_self_info['teacher_name'];
+    document.getElementById("prof_id").innerHTML = user_self_info['teacher_number'];
+    document.getElementById("prof_class").innerHTML = user_self_info['course_list'];
+    document.getElementById("prof_ci").innerHTML = user_self_info['CI'];
+    document.getElementById("prof_city").innerHTML = user_self_info['city'];
+    document.getElementById("prof_cr").innerHTML = user_self_info['continent'];
 
 }
 
@@ -78,9 +137,36 @@ function edit_weight(app) {
                 //submit weight_new of (app=0) to back-end.
                 //.......
 
-                document.getElementById("weight_status_duo").innerHTML = weight_new;
-                $('#collapse_duo').collapse('hide');
-                alert("Submit successfully!");
+                $.ajaxSetup({
+                    async : false
+                });
+                try
+                {
+                    $.post("/tc_setting/TcSetWight", {username: sessionStorage.getItem('username'), app_id: 1, weight: weight_new},
+                        function (data)
+                        {
+                            var req_data = JSON.parse(data);
+                            if (req_data['code'] == 'True')
+                            {
+                                document.getElementById("weight_status_duo").innerHTML = weight_new;
+                                $('#collapse_duo').collapse('hide');
+                                alert('Set weight Successfully!');
+                            }
+                            else
+                            {
+                                alert('Set weight Failly! Please try again later!');
+                            }
+                        });
+                }
+                catch (e)
+                {
+                    alert('Set weight Failly! Please try again later!');
+                }
+
+
+                //document.getElementById("weight_status_duo").innerHTML = weight_new;
+                // $('#collapse_duo').collapse('hide');
+                //alert("Submit successfully!");
             }
         }
         else{
@@ -108,10 +194,35 @@ function edit_passwd(flag) {
             //submit to back-end
             //...............
 
+            $.ajaxSetup({
+                    async : false
+                });
+
+            try
+            {
+                $.post("/tc_setting/TcChangePassword", {username: sessionStorage.getItem('username'), password: p1},
+                    function (data)
+                    {
+                        var req_data = JSON.parse(data);
+                        if (req_data['code'] == 'True')
+                        {
+                            alert('Change Successfully!');
+                        }
+                        else
+                        {
+                            alert('Change Failly! Please try again later!');
+                        }
+                    });
+            }
+            catch (e)
+            {
+                alert('Change Failly! Please try again later!');
+            }
+
             $('#passwd_value_new').val('');
             $('#passwd_value_confirm').val('');
             $('#collapse_passwd').collapse('hide');
-            alert("Change successfully!")
+            //alert("Change successfully!")
         }
     }
     //cancel

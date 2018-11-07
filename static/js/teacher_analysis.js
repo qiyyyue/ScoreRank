@@ -1,3 +1,116 @@
+
+
+var tc_rank_list;
+var page_num = 0;
+var one_page_num = 100;
+
+function init_rank_data(period )
+{
+    if (sessionStorage.getItem("username"))
+    {
+        //
+    }
+
+    // init rank_list info
+    try
+    {
+        $.ajaxSetup({
+            async : false
+        });
+
+        $.post("/tc_analysis/GetTcClassLeaderBoard", {period: period, username: sessionStorage.getItem("username")},
+        function (data)
+        {
+            var req_data = JSON.parse(data);
+            if (req_data['code'] == 'True')
+            {
+                tc_rank_list = req_data['leader_board_list'];
+                console.log(tc_rank_list);
+                // self_info = req_data['self_info']
+                // alert("flag_l");
+                // flag_l = true;
+            }
+        });
+
+    }
+    catch (e)
+    {
+        alert(e.toString());
+    }
+
+
+}
+
+function init_data()
+{
+    if (!sessionStorage.getItem('username'))
+    {
+        window.location.href = '/';
+    }
+
+
+    page_num = 0;
+
+    //1. clean old
+    country.innerHTML ="";
+    city.innerHTML = "";
+
+    var period = document.getElementById("class_time");
+
+    // alert(continent.options[continent.selectedIndex].value);
+    init_rank_data(period.options[period.selectedIndex].value);
+
+    view_first_page();
+}
+
+function view_first_page()
+{
+    // for (var i = 0; i < rank_list.length; i++)
+    //     alert (rank_list[i]['username']);
+    // alert("rank " + my_info['rank']);
+    // alert("point " + my_info['point']);
+
+    page_num = 0;
+
+    // $('#home_my').html("");
+    // $('#home_list').html("");
+    // document.getElementById("table_home_my").style.display='none';
+    // document.getElementById("table_home_list").style.display='none';
+
+    // add_self_rank();
+
+    for (var i = 0; i < one_page_num && i < tc_rank_list.length; i++)
+    {
+        console.log(tc_rank_list[i]);
+        // alert(rank_list[i]['rank']);
+
+        var tdRow = document.createElement('tr');
+        //generate tdcell
+        var tdCell = document.createElement('td');
+        tdCell.innerHTML = tc_rank_list[i]['rank'];
+        tdRow.appendChild(tdCell);
+        tdCell = document.createElement('td');
+        tdCell.innerHTML = tc_rank_list[i]['class_name'];
+        tdRow.appendChild(tdCell);
+        tdCell = document.createElement('td');
+        tdCell.innerHTML = tc_rank_list[i]['teacher_name'];
+        tdRow.appendChild(tdCell);
+        tdCell = document.createElement('td');
+        tdCell.innerHTML = tc_rank_list[i]['avg_point'];
+        tdRow.appendChild(tdCell);
+        tdCell = document.createElement('td');
+        tdCell.innerHTML = tc_rank_list[i]['status'];
+        tdRow.appendChild(tdCell);
+        //write tr row
+        document.getElementById("class_rank_table").appendChild(tdRow);
+    }
+
+    console.log("finished write table");
+    // document.getElementById("table_home_my").style.display='block';
+    // document.getElementById("table_home_list").style.display='block';
+}
+
+
 function check_li_option(li_option) {
     document.getElementById("item_class_rank").style.display ='none';
     document.getElementById("item_st_list").style.display ='none';
@@ -21,12 +134,8 @@ function cl_rank_changed(){
     var app_index = app.selectedIndex;
 
     var flag = true;
-    var jsonData_list = [{c1:1,c2:"Class 4",c3:"Dr. Shawn",c4:551,c5:"+1"},
-        {c1:2,c2:"Class 3",c3:"Dr. Tyler",c4:532,c5:"-1"},
-        {c1:3,c2:"Class 5",c3:"Dr. Daisy",c4:517,c5:"+1"},
-        {c1:4,c2:"Class 1",c3:"Dr. Vinson",c4:509,c5:"+1"},
-        {c1:5,c2:"Class 2",c3:"Dr. Wilbert",c4:497,c5:"-2"},
-    ]; //return 5 records (if have 5 classes)
+
+    init_rank_data(time.options[time.selectedIndex].value);
 
     //******the above 2 variables are the return values from back-end
     //******back-end may need :
@@ -37,7 +146,7 @@ function cl_rank_changed(){
     }
     else{
         $('#class_rank_table').html("");
-        write_table_rows(jsonData_list,"class_rank_table");
+        view_first_page();
     }
 }
 

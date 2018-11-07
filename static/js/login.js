@@ -13,7 +13,7 @@ function check_login()
         return;
     }
 
-    $.post("/user_info/login", {username: username, password: password},
+    $.post("/log_reg/Login", {username: username, password: password},
         function (data)
         {
             var login_req = JSON.parse(data);

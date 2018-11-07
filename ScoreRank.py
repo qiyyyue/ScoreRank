@@ -3,24 +3,31 @@ import os, sys
 base_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(base_dir, 'src/API'))
 sys.path.append(os.path.join(base_dir, 'src/DB'))
-sys.path.append(os.path.join(base_dir, 'src/Rank'))
-sys.path.append(os.path.join(base_dir, 'src/UserInfo'))
+sys.path.append(os.path.join(base_dir, 'src/WebFunc/LogReg'))
+sys.path.append(os.path.join(base_dir, 'src/WebFunc/StudentFunc'))
+sys.path.append(os.path.join(base_dir, 'src/WebFunc/TeacherFunc'))
 sys.path.append(os.path.join(base_dir, 'src/DataUpdate'))
 sys.path.append(os.path.join(base_dir, 'configure'))
 from flask import Flask
 from flask import render_template
-from Analysis import analysis
-from user_info import user_info
-from Home import home
-from Setting import setting
+from LogReg import log_reg_bp
+from StuAnalysis import stu_analysis_bp
+from StuHome import stu_home_bp
+from StuSetting import stu_setting_bp
+from TcHome import tc_home_bp
+from TcAnalysis import tc_analysis_bp
+from TcSetting import tc_setting_bp
 from data_update import data_update
 app = Flask(__name__)
 app.secret_key='qiyyyue'
 
-app.register_blueprint(user_info,url_prefix='/user_info')
-app.register_blueprint(analysis, url_prefix='/analysis')
-app.register_blueprint(home, url_prefix='/home')
-app.register_blueprint(setting, url_prefix='/setting')
+app.register_blueprint(log_reg_bp, url_prefix='/log_reg')
+app.register_blueprint(stu_analysis_bp, url_prefix='/stu_analysis')
+app.register_blueprint(stu_home_bp, url_prefix='/stu_home')
+app.register_blueprint(stu_setting_bp, url_prefix='/stu_setting')
+app.register_blueprint(tc_home_bp, url_prefix='/tc_home')
+app.register_blueprint(tc_analysis_bp, url_prefix='/tc_analysis')
+app.register_blueprint(tc_setting_bp, url_prefix='/tc_setting')
 app.register_blueprint(data_update, url_prefix='/data_update')
 
 

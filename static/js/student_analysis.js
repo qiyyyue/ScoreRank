@@ -19,7 +19,7 @@ function init_history_rank(period)
         $.ajaxSetup({
             async : false
         });
-        $.post("/analysis/GetHistoryRank", {period: period, username: sessionStorage.getItem("username")},
+        $.post("/stu_analysis/GetHistoryRank", {period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
@@ -44,7 +44,7 @@ function init_history_points(period)
         $.ajaxSetup({
             async : false
         });
-        $.post("/analysis/GetHistoryPoint", {period: period, username: sessionStorage.getItem("username")},
+        $.post("/stu_analysis/GetHistoryPoint", {period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
@@ -69,7 +69,7 @@ function init_history_avg_points(period)
         $.ajaxSetup({
             async : false
         });
-        $.post("/analysis/GetHistoryAvgPoint", {period: period, username: sessionStorage.getItem("username")},
+        $.post("/stu_analysis/GetHistoryAvgPoint", {period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
@@ -94,7 +94,7 @@ function init_history_date(period)
         $.ajaxSetup({
             async : false
         });
-        $.post("/analysis/GetHistoryDate", {period: period, username: sessionStorage.getItem("username")},
+        $.post("/stu_analysis/GetHistoryDate", {period: period, username: sessionStorage.getItem("username")},
         function (data)
         {
             var req_data = JSON.parse(data);
